@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Simulador.Models.Dato>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Indice</h2>
+
+<p>
+    @Html.ActionLink("Crear nuevo", "Create")
+</p>
+<table class="table">
+    <tr>      
+        <th>           
+            @Html.DisplayNameFor(model => model.cap_max_tanque)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.temp_inicial_tanque)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.material_tanque)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.resistencia_watts)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cant_ml_s)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cant_ml_incial)
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.cap_max_tanque)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.temp_inicial_tanque)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.material_tanque)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.resistencia_watts)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cant_ml_s)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cant_ml_incial)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,61 @@
+﻿@model Simulador.Models.Dato
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div>
+    <h4>Simulador</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.cap_max_tanque)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cap_max_tanque)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.temp_inicial_tanque)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.temp_inicial_tanque)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.material_tanque)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.material_tanque)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.resistencia_watts)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.resistencia_watts)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cant_ml_s)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cant_ml_s)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cant_ml_incial)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cant_ml_incial)
+        </dd>
+
+    </dl>
+</div>
