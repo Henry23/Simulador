@@ -69,10 +69,10 @@
                      <tr>
                          <th>&nbsp;&nbsp;&nbsp;&nbsp;Capacidad: </th>
                          <th>Temp. Inicial:</th>
-                         <th>Material:</th>
-                         <th>Resistencia:</th>
-                         <th>Ml/Segundos:</th>
-                         <th>Ml/Inicial:</th>
+                         <th>Costo:</th>
+                         <th>Watts:</th>
+                         <th>Litros/S:</th>
+                         <th>Volumen Inicial:</th>
                      </tr>
                      </thead>
                 <tbody>
@@ -93,13 +93,18 @@
         <tr>
             <th>Temperatura
                 <div class="progress">
-                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">80%
-                        <span class="sr-only">80% Complete (danger)</span>
+                    <div class="progress-bar progress-bar-danger" role="progressbar" runat="server" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">80%
+                        <span class="sr-only"> 80% Complete (danger)</span>
                     </div>
                 </div>
+                <asp:Label ID="Label1" runat="server" Text="TempFinal"></asp:Label>
+                <asp:TextBox ID="TempFinal" runat="server"></asp:TextBox>
+                <asp:Label ID="Label2" runat="server" Text="Minutos"></asp:Label>
+                <asp:TextBox ID="TextBox8" runat="server"></asp:TextBox>
+                <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>
             </th>
             <th>
-                <asp:CheckBoxList ID="CheckBoxList1" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CausesValidation="True" RepeatDirection="Horizontal">
+                <asp:CheckBoxList ID="CheckBoxList1" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CausesValidation="True" RepeatDirection="Horizontal" OnSelectedIndexChanged="CheckBoxList1_SelectedIndexChanged">
                     <asp:ListItem Value="0">Manual</asp:ListItem>
                     <asp:ListItem Selected="True" Value="1">Automatico</asp:ListItem>
                 </asp:CheckBoxList>
@@ -110,7 +115,7 @@
         </tr>
     </table>
 
-    <asp:Button ID="Button1" class="btn btn-primary btn-large" runat="server" Text="Abrir " />
+    <asp:Button ID="Button1" class="btn btn-primary btn-large" runat="server" Text="Empezar " OnClick="Button1_Click" />
     <asp:Button ID="Button2" class="btn btn-primary btn-large" runat="server" Text="Cerrar" />
 
     </form>

@@ -17,29 +17,29 @@ namespace Simulador.Models
         public float cap_max_tanque { get; set; }
 
 
-        [Display(Name = "Temperatura inicial del tanque")]
+        [Display(Name = "Temperatura inicial en C")]
         [Required(ErrorMessage = "Temperatura inicial del tanque no puede ser vacia")]
         [RegularExpression(@"^[1-9][0-9]?$|^100$", ErrorMessage = "Solo números del 1 al 100")]
         public float temp_inicial_tanque { get; set; }
 
  
-        [Display(Name = "Material del tanque")]
+        [Display(Name = "Costo de kWh")]
         [Required(ErrorMessage = "Temperatura inicial del tanque no puede ser vacia")]
         [StringLength(10)]
         public string material_tanque { get; set; }
 
 
-        [Display(Name = "Resistencia en watts")]
+        [Display(Name = "Potencia en watts")]
         [Required(ErrorMessage = "Resistencia en watts no puede ser vacia")]
         public int resistencia_watts { get; set; }
 
 
-        [Display(Name = "Cantidad en ML/Segundos")]
+        [Display(Name = "Volumen en Litros/Segundos")]
         [Required(ErrorMessage = "Cantidad en ML/Segundos no puede ser vacia")]
         [StringLength(10)]
         public string cant_ml_s { get; set; }
 
-        [Display(Name = "Cantidad en ML inicial")]
+        [Display(Name = "Volumen en Litros inicial")]
         [Required(ErrorMessage = "Cantidad en ML inicial no puede ser vacia")]
         [StringLength(10)]
         public string cant_ml_incial { get; set; }
