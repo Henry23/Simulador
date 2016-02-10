@@ -93,8 +93,7 @@
         <tr>
             <th>Temperatura
                 <div class="progress">
-                    <div class="progress-bar progress-bar-danger" role="progressbar" runat="server" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">80%
-                        <span class="sr-only"> 80% Complete (danger)</span>
+                    <div class="progress-bar progress-bar-danger" role="progressbar" runat="server" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%" id="progress">&nbsp;<span class="sr-only">80% Complete (danger)</span>
                     </div>
                 </div>
                 <asp:Label ID="Label1" runat="server" Text="TempFinal"></asp:Label>

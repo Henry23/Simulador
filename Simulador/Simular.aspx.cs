@@ -17,6 +17,12 @@ namespace Simulador.Views.Simulador
          
         }
 
+        public double currentTemp = 0.0;
+        public double tankVolume = 0.0;
+        public double timeInSeconds = 0.0;
+        public double energyInWatts = 0.0;
+        public double timeElapsed = 0.0;
+
         protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
         {
            
@@ -57,7 +63,6 @@ namespace Simulador.Views.Simulador
             double minutos = 0.0;
             try
             {
-
                 SqlDataSource1.SelectCommand = "SELECT * FROM [Datos] WHERE [Id] = " + DropDownList1.SelectedValue;
                 this.SqlDataSource1.DataSourceMode = SqlDataSourceMode.DataReader;
                 SqlDataReader datos = (SqlDataReader)this.SqlDataSource1.Select(DataSourceSelectArguments.Empty);
@@ -84,7 +89,7 @@ namespace Simulador.Views.Simulador
                         var volumeInGallons = Int32.Parse(VolumenInicial) * 0.264;
                         var startTempInF = Int32.Parse(TempInicial);
                         var endTempInF = Int32.Parse(TempFinal.Text);
-                        var energyInWatts = Int32.Parse(Potencia);
+                        energyInWatts = Int32.Parse(Potencia);
                         if (startTempInF < endTempInF)
                         {
                              minutos = Math.Round(100 * ((volumeInGallons * 8.33 * 453.59237) * (endTempInF - startTempInF) /
@@ -92,12 +97,16 @@ namespace Simulador.Views.Simulador
 
                             var Horas = (Math.Floor(Math.Abs(minutos) / 60));
                             minutos = (Math.Abs(minutos) % 60);
-
+                            updateProgressBar(endTempInF, startTempInF);
+                            currentTemp = startTempInF;
+                            tankVolume = Double.Parse(VolumenInicial);
                             TextBox8.Text = Horas + " Horas " + minutos + " Minutos";
+                            timeInSeconds = (Horas * 60 * 60) + minutos * 60;
+                            
 
                         }
                     }
-                }catch(Exception exx) { }
+                }catch(Exception ex) { }
                
             }
             catch (SqlException ex)
@@ -117,6 +126,29 @@ namespace Simulador.Views.Simulador
            child.Abort();*/
         }
 
+        
+
+        protected void updateProgressBar(double maxTemp,double currentTemp)
+        {
+            Control progressBar = FindControl("progress");
+            double calc = currentTemp / maxTemp;
+            double percentageWidth = calc * 100;
+            progress.Style["width"] = ""+(percentageWidth)+"%";
+        }
+
+        protected void tempThread()
+        {
+            while (true)
+            {
+                double c = 4180; // J/kg°C
+                double density = 0.9999; //g*cm3
+                double mass = tankVolume * density; //kg;
+                double heat = energyInWatts * timeElapsed;
+                double deltaTemp = heat / (mass * c);
+                Thread.Sleep(1000);
+            }
+
+        }
       /*  public void childthreadcall()
         {
             try
