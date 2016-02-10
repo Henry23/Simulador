@@ -189,6 +189,5 @@ D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\bin\Microsoft.Owin.Security.OAut
 D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\bin\Microsoft.Owin.Security.Google.xml
 D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\bin\Microsoft.Owin.Security.Twitter.xml
 D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\obj\Debug\Simulador.csprojResolveAssemblyReference.cache
 D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\obj\Debug\Simulador.dll
 D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\obj\Debug\Simulador.pdb

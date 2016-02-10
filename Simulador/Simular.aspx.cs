@@ -20,8 +20,10 @@ namespace Simulador.Views.Simulador
         public double currentTemp = 0.0;
         public double tankVolume = 0.0;
         public double timeInSeconds = 0.0;
+        public double timeInSecondsChange = 0.0;
         public double energyInWatts = 0.0;
         public double timeElapsed = 0.0;
+        public double tempFinalStatic = 0.0;
 
         protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -95,14 +97,16 @@ namespace Simulador.Views.Simulador
                              minutos = Math.Round(100 * ((volumeInGallons * 8.33 * 453.59237) * (endTempInF - startTempInF) /
                             (energyInWatts * 0.238845896628 * 95)) / 60);
 
-                            var Horas = (Math.Floor(Math.Abs(minutos) / 60));
+                            //var Horas = (Math.Floor(Math.Abs(minutos) / 60));
                             minutos = (Math.Abs(minutos) % 60);
                             updateProgressBar(endTempInF, startTempInF);
                             currentTemp = startTempInF;
+                            tempFinalStatic = endTempInF;
                             tankVolume = Double.Parse(VolumenInicial);
-                            TextBox8.Text = Horas + " Horas " + minutos + " Minutos";
-                            timeInSeconds = (Horas * 60 * 60) + minutos * 60;
-                            
+                            TextBox8.Text = minutos + " Minutos";
+                            timeInSeconds = minutos * 60;
+                            Thread timeThread = new Thread(new ThreadStart(tempThread));
+                            timeThread.Start();
 
                         }
                     }
@@ -138,16 +142,32 @@ namespace Simulador.Views.Simulador
 
         protected void tempThread()
         {
-            while (true)
+            while (currentTemp < tempFinalStatic)
             {
                 double c = 4180; // J/kg°C
                 double density = 0.9999; //g*cm3
                 double mass = tankVolume * density; //kg;
-                double heat = energyInWatts * timeElapsed;
-                double deltaTemp = heat / (mass * c);
-                Thread.Sleep(1000);
+                double heat = energyInWatts * timeElapsed; //mala esta onda;
+                                                           //double deltaTemp = heat / (mass * c);
+
+                double tempChange = Math.Abs(tempFinalStatic - currentTemp) * (1/timeInSeconds);
+                currentTemp = currentTemp * 1 + tempChange;
+                timeInSecondsChange = timeInSeconds - 1;
+                setTime(timeInSecondsChange);
+                timeElapsed++;
+                updateProgressBar(tempFinalStatic, currentTemp);
+                Thread.Sleep(250);
             }
 
+        }
+
+ 
+        protected void setTime(double seconds)
+        {
+            double minutos = (seconds / 60);
+            minutos = (Math.Floor(minutos));
+            
+            TextBox8.Text = minutos + " Minutos";
         }
       /*  public void childthreadcall()
         {
