@@ -142,8 +142,8 @@
             var newMass = (amountWaterEntered) * 1;
             
             var oldMass = (tankVolume) * 1;
-            var numerator = (oldMass * currentTemp) + (newMass * initTemp);
-            var tempTemp = numerator / (currentTemp + initTemp);
+            var numerator = (oldMass * initTemp) + (newMass * currentTemp);
+            var tempTemp = numerator / (oldMass + newMass);
             currentTemp = tempTemp;
             updateProgressBar();
             tankVolume += amountWaterEntered;
