@@ -272,7 +272,7 @@
                     <asp:ListItem Selected="True" Value="1">Automatico</asp:ListItem>
                 </asp:CheckBoxList>-->
                 <input type="radio" id="manual" name="tipo" value="manual" /> Manual 
-                <input type="radio" id="automatico "name="tipo" value="automatico" checked="checked"/> Automatico
+                <input type="radio" id="automatico"name="tipo" value="automatico" checked="checked"/> Automatico
             </th>
         </tr>
         <tr>
