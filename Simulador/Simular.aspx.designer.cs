@@ -103,13 +103,13 @@ namespace Simulador.Views.Simulador {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl progress;
         
         /// <summary>
-        /// Div1 control.
+        /// tankProgress control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Div1;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl tankProgress;
         
         /// <summary>
         /// Label1 control.
@@ -146,15 +146,6 @@ namespace Simulador.Views.Simulador {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox8;
-        
-        /// <summary>
-        /// Label3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label3;
         
         /// <summary>
         /// CheckBoxList1 control.

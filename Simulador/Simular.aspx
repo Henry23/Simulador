@@ -41,32 +41,58 @@
         var timeElapsed = 0.0;
         var tempFinalStatic = 0.0;
         var tankCapacity = 0.0;
-	var intervalControl; 
+        var initTemp = 0.0;
+        var amountWaterEntered = 0.0;
+	    var intervalControl; 
 
 	    function initInterval(){
 	        initData();
 		    intervalControl = setInterval(function(){
-			    tempThread();
+			    heatThread();
 		    },250);
 	    }
 
-        function tempThread(){
+        function heatThread(){
                 var c = 4180; // J/kg°C
                 var density = 0.9999; //g*cm3
                 var mass = (tankVolume* 0.264) * density; //kg;
                 var heat = energyInWatts * timeElapsed; //mala esta onda;
                 //double deltaTemp = heat / (mass * c);
-
+                if (currentTemp >= tempFinalStatic) {
+                    clearInterval(intervalControl);
+                    intervalControl = setInterval(function () {
+                        coldThread();
+                    }, 250);
+                }
                 var tempChange = Math.abs(tempFinalStatic - currentTemp) * (1/timeInSeconds);
                 currentTemp = currentTemp * 1 + tempChange;
                 timeInSecondsChange = timeInSecondsChange - 1;
                 setTime(timeInSecondsChange);
                 timeElapsed++;
                 updateProgressBar(tempFinalStatic, currentTemp);
-		        if (currentTemp >= tempFinalStatic){
-			        clearInterval(intervalControl);
-		        }
+        }
+
+        function coldThread() {
+            if (currentTemp <= tempFinalStatic || initTemp <= currentTemp) {
+                clearInterval(intervalControl);
+                intervalControl = setInterval(function () {
+                    heatThread();
+                }, 250);
+            }
+            //Qlost == Qgain
+            /*
+                (old)(Tcurrent - X)(HeatC) == (new)(X - Tentrada)(HeatC);
+            */
+            //grams
+            var newMass = (amountWaterEntered) * 1;
             
+            var oldMass = (tankVolume) * 1;
+            var numerator = (oldMass * currentTemp) + (newMass * 24);
+            var tempTemp = numerator / (currentTemp + 24);
+            currentTemp = tempTemp;
+            updateProgressBar();
+            tankVolume += amountWaterEntered;
+
         }
         function setTime(seconds) {
             var minutos = (seconds / 60);
@@ -77,9 +103,18 @@
         function updateProgressBar() {
            
             var calc = currentTemp / tempFinalStatic;
+            if (calc > 1) {
+                calc = tempFinalStatic / currentTemp;
+            }
             var percentageWidth = calc * 100;
             var tankCurrentCap = tankVolume / tankCapacity;
             tankCurrentCap *= 100;
+            if (percentageWidth > 100) {
+                percentageWidth = 100;
+            }
+            if (tankCurrentCap > 100) {
+                tankCurrentCap = 100;
+            }
             $('#progress').css({
                 width:""+(percentageWidth)+"%"
             });
@@ -94,6 +129,8 @@
             energyInWatts = parseInt($('#TextBox4').val());
             tankVolume = parseInt($('#TextBox6').val());
             tempFinalStatic = parseInt($('#TempFinal').val());
+            amountWaterEntered = parseInt($("#TextBox5").val());
+            initTemp = currentTemp;
             timeInSeconds = Math.round(100 * (((tankVolume * 0.264) * 8.33 * 453.59237) * (tempFinalStatic - currentTemp) / (energyInWatts * 0.238845896628 * 95)));
             timeInSecondsChange = timeInSeconds;
         }
@@ -179,10 +216,12 @@
                 <asp:TextBox ID="TextBox8" runat="server" ></asp:TextBox>
             </th>
             <th>
-                <asp:CheckBoxList ID="CheckBoxList1" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CausesValidation="True" RepeatDirection="Horizontal" OnSelectedIndexChanged="CheckBoxList1_SelectedIndexChanged">
+                <!--<asp:CheckBoxList ID="CheckBoxList1" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CausesValidation="True" RepeatDirection="Horizontal" OnSelectedIndexChanged="CheckBoxList1_SelectedIndexChanged">
                     <asp:ListItem Value="0">Manual</asp:ListItem>
                     <asp:ListItem Selected="True" Value="1">Automatico</asp:ListItem>
-                </asp:CheckBoxList>
+                </asp:CheckBoxList>-->
+                <input type="radio" name="tipo" value="manual" /> Manual 
+                <input type="radio" name="tipo" value="automatico" checked="checked"/> Automatico
             </th>
         </tr>
         <tr>
