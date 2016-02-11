@@ -43,9 +43,26 @@
         var tankCapacity = 0.0;
         var initTemp = 0.0;
         var amountWaterEntered = 0.0;
-	    var intervalControl; 
+        var intervalControl;
+        
+  
 
-	    function initInterval(){
+
+	    function radiobuttons() {
+
+
+	    }
+
+	    function initInterval() {
+	        document.getElementById("manual").disabled = true;
+	        document.getElementById("automatico").disabled = true;
+	        if (document.getElementById("manual").isDisabled) {
+	            document.getElementById("abrirAguaFria").disabled = true;
+	            document.getElementById("abrirSalidaAgua").disabled = true;
+	        } else {
+	            document.getElementById("abrirAguaFria").disabled = false;
+	            document.getElementById("abrirSalidaAgua").disabled = false;
+	        }	       
 	        initData();
 		    intervalControl = setInterval(function(){
 			    heatThread();
@@ -57,12 +74,15 @@
                 var density = 0.9999; //g*cm3
                 var mass = (tankVolume* 0.264) * density; //kg;
                 var heat = energyInWatts * timeElapsed; //mala esta onda;
-                //double deltaTemp = heat / (mass * c);
-                if (currentTemp >= tempFinalStatic) {
-                    clearInterval(intervalControl);
-                    intervalControl = setInterval(function () {
-                        coldThread();
-                    }, 250);
+            //double deltaTemp = heat / (mass * c);
+
+                if((document.getElementById("manual").isDisabled){
+                    if (currentTemp >= tempFinalStatic) {
+                        clearInterval(intervalControl);
+                        intervalControl = setInterval(function () {
+                            coldThread();
+                        }, 250);
+                    }
                 }
                 var tempChange = Math.abs(tempFinalStatic - currentTemp) * (1/timeInSeconds);
                 currentTemp = currentTemp * 1 + tempChange;
@@ -70,6 +90,32 @@
                 setTime(timeInSecondsChange);
                 timeElapsed++;
                 updateProgressBar(tempFinalStatic, currentTemp);
+        }
+
+        function setWater(){
+
+            var newMass = (amountWaterEntered) * 1;
+            
+            var oldMass = (tankVolume) * 1;
+            var numerator = (oldMass * currentTemp) + (newMass * 24);
+            var tempTemp = numerator / (currentTemp + 24);
+            currentTemp = tempTemp;
+            updateProgressBar();
+            tankVolume += amountWaterEntered;
+          
+        
+        }
+  
+        function outWater(){
+        
+            var newMass = (amountWaterEntered) * 1;            
+            var oldMass = (tankVolume) * 1;
+            var numerator = (oldMass * currentTemp) - (newMass * 24);
+            var tempTemp = numerator / (currentTemp - 24);
+            currentTemp = tempTemp;
+            updateProgressBar();
+            tankVolume -= amountWaterEntered;
+         
         }
 
         function coldThread() {
@@ -220,12 +266,14 @@
                     <asp:ListItem Value="0">Manual</asp:ListItem>
                     <asp:ListItem Selected="True" Value="1">Automatico</asp:ListItem>
                 </asp:CheckBoxList>-->
-                <input type="radio" name="tipo" value="manual" /> Manual 
-                <input type="radio" name="tipo" value="automatico" checked="checked"/> Automatico
+                <input type="radio" id="manual" name="tipo" value="manual" /> Manual 
+                <input type="radio" id="automatico "name="tipo" value="automatico" checked="checked"/> Automatico
             </th>
         </tr>
         <tr>
-            <td></td>
+            <td>
+                <input id="abrirAguafria" type="button" value="Abrir Agua Fría" disabled="disabled" onmousedown="setWater()"/>
+                <input id="abrirSalidaAgua" type="button" value="Abrir salida de Agua" disabled="disabled" onmousedown="outWater()"/>(Mantener Presionado)</td>
         </tr>
     </table>
 
