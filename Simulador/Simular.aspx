@@ -107,7 +107,7 @@
                 currentTemp = tempTemp;
                 updateProgressBar();
                 tankVolume += amountWaterEntered;
-             //}
+             //} 
         
         }
   
