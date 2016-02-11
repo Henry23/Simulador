@@ -99,14 +99,11 @@ namespace Simulador.Views.Simulador
 
                             //var Horas = (Math.Floor(Math.Abs(minutos) / 60));
                             minutos = (Math.Abs(minutos) % 60);
-                            updateProgressBar(endTempInF, startTempInF);
                             currentTemp = startTempInF;
                             tempFinalStatic = endTempInF;
                             tankVolume = Double.Parse(VolumenInicial);
                             TextBox8.Text = minutos + " Minutos";
                             timeInSeconds = minutos * 60;
-                            Thread timeThread = new Thread(new ThreadStart(tempThread));
-                            timeThread.Start();
 
                         }
                     }
@@ -132,43 +129,11 @@ namespace Simulador.Views.Simulador
 
         
 
-        protected void updateProgressBar(double maxTemp,double currentTemp)
-        {
-            Control progressBar = FindControl("progress");
-            double calc = currentTemp / maxTemp;
-            double percentageWidth = calc * 100;
-            progress.Style["width"] = ""+(percentageWidth)+"%";
-        }
+       
 
-        protected void tempThread()
-        {
-            while (currentTemp < tempFinalStatic)
-            {
-                double c = 4180; // J/kg°C
-                double density = 0.9999; //g*cm3
-                double mass = tankVolume * density; //kg;
-                double heat = energyInWatts * timeElapsed; //mala esta onda;
-                                                           //double deltaTemp = heat / (mass * c);
-
-                double tempChange = Math.Abs(tempFinalStatic - currentTemp) * (1/timeInSeconds);
-                currentTemp = currentTemp * 1 + tempChange;
-                timeInSecondsChange = timeInSeconds - 1;
-                setTime(timeInSecondsChange);
-                timeElapsed++;
-                updateProgressBar(tempFinalStatic, currentTemp);
-                Thread.Sleep(250);
-            }
-
-        }
 
  
-        protected void setTime(double seconds)
-        {
-            double minutos = (seconds / 60);
-            minutos = (Math.Floor(minutos));
-            
-            TextBox8.Text = minutos + " Minutos";
-        }
+        
       /*  public void childthreadcall()
         {
             try

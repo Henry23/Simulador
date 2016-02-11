@@ -9,9 +9,14 @@
 
     <link href="~/Content/css" rel="stylesheet" type="text/css" />
     <script src="~/bundles/modernizr" type="text/javascript"></script>
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
     <title></title>
     <style type="text/css">
+	.hidden{
+		display:none;
+	}
         .newStyle2 {
             table-layout: auto;
             border-collapse: separate;
@@ -25,9 +30,74 @@
             border-collapse: separate;
             empty-cells: show;
             border-spacing: inherit;
-            
         }
     </style>
+    <script>
+        var currentTemp = 0.0;
+        var tankVolume = 0.0;
+        var timeInSeconds = 0.0;
+        var timeInSecondsChange = 0.0;
+        var energyInWatts = 0.0;
+        var timeElapsed = 0.0;
+        var tempFinalStatic = 0.0;
+        var tankCapacity = 0.0;
+	var intervalControl; 
+
+	    function initInterval(){
+	        initData();
+		    intervalControl = setInterval(function(){
+			    tempThread();
+		    },250);
+	    }
+
+        function tempThread(){
+                var c = 4180; // J/kg°C
+                var density = 0.9999; //g*cm3
+                var mass = (tankVolume* 0.264) * density; //kg;
+                var heat = energyInWatts * timeElapsed; //mala esta onda;
+                //double deltaTemp = heat / (mass * c);
+
+                var tempChange = Math.abs(tempFinalStatic - currentTemp) * (1/timeInSeconds);
+                currentTemp = currentTemp * 1 + tempChange;
+                timeInSecondsChange = timeInSecondsChange - 1;
+                setTime(timeInSecondsChange);
+                timeElapsed++;
+                updateProgressBar(tempFinalStatic, currentTemp);
+		        if (currentTemp >= tempFinalStatic){
+			        clearInterval(intervalControl);
+		        }
+            
+        }
+        function setTime(seconds) {
+            var minutos = (seconds / 60);
+            minutos = (Math.floor(minutos));
+            $('#TextBox8').val(minutos + " Minutos");
+            //TextBox8.Text = minutos + " Minutos";
+        }
+        function updateProgressBar() {
+           
+            var calc = currentTemp / tempFinalStatic;
+            var percentageWidth = calc * 100;
+            var tankCurrentCap = tankVolume / tankCapacity;
+            tankCurrentCap *= 100;
+            $('#progress').css({
+                width:""+(percentageWidth)+"%"
+            });
+            $('#tankProgress').css({
+                width: "" + (tankCurrentCap) + "%"
+            });
+
+        }
+        function initData() {
+            tankCapacity = parseInt($('#TextBox1').val());
+            currentTemp = parseInt($('#TextBox2').val());
+            energyInWatts = parseInt($('#TextBox4').val());
+            tankVolume = parseInt($('#TextBox6').val());
+            tempFinalStatic = parseInt($('#TempFinal').val());
+            timeInSeconds = Math.round(100 * (((tankVolume * 0.264) * 8.33 * 453.59237) * (tempFinalStatic - currentTemp) / (energyInWatts * 0.238845896628 * 95)));
+            timeInSecondsChange = timeInSeconds;
+        }
+    </script>
 </head>
 <body>
     <div id="header">
@@ -92,15 +162,21 @@
     <table class="table">       
         <tr>
             <th>Temperatura
-                <div class="progress">
-                    <div class="progress-bar progress-bar-danger" role="progressbar" runat="server" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%" id="progress">&nbsp;<span class="sr-only">80% Complete (danger)</span>
+                <div class="progress" runat="server">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" runat="server" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="progress">
+                        &nbsp;
+                    </div>
+                </div>
+                Capacidad Tanque
+                <div class="progress" runat="server">
+                    <div class="progress-bar progress-bar" role="progressbar" runat="server" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="tankProgress">
+                        &nbsp;
                     </div>
                 </div>
                 <asp:Label ID="Label1" runat="server" Text="TempFinal"></asp:Label>
                 <asp:TextBox ID="TempFinal" runat="server"></asp:TextBox>
                 <asp:Label ID="Label2" runat="server" Text="Minutos"></asp:Label>
-                <asp:TextBox ID="TextBox8" runat="server"></asp:TextBox>
-                <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>
+                <asp:TextBox ID="TextBox8" runat="server" ></asp:TextBox>
             </th>
             <th>
                 <asp:CheckBoxList ID="CheckBoxList1" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CausesValidation="True" RepeatDirection="Horizontal" OnSelectedIndexChanged="CheckBoxList1_SelectedIndexChanged">
@@ -114,7 +190,7 @@
         </tr>
     </table>
 
-    <asp:Button ID="Button1" class="btn btn-primary btn-large" runat="server" Text="Empezar " OnClick="Button1_Click" />
+    <input name="Button1" value="Empezar " id="Button3" class="btn btn-primary btn-large" onclick="initInterval()"/>
     <asp:Button ID="Button2" class="btn btn-primary btn-large" runat="server" Text="Cerrar" />
 
     </form>

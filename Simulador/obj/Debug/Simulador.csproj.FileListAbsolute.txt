@@ -191,3 +191,4 @@ D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\bin\Microsoft.Owin.Security.Twit
 D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\obj\Debug\Simulador.dll
 D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\obj\Debug\Simulador.pdb
+D:\Datos\UNITEC\IngSoftware\Simulador\Simulador\obj\Debug\Simulador.csprojResolveAssemblyReference.cache
