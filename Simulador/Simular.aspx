@@ -57,7 +57,7 @@
 	    function initInterval() {
 	        document.getElementById("manual").disabled = true;
 	        document.getElementById("automatico").disabled = true;
-	        if (document.getElementById("manual").isDisabled) {
+	        if (document.getElementById("manual").disabled) {
 	            document.getElementById("abrirAguaFria").disabled = true;
 	            document.getElementById("abrirSalidaAgua").disabled = true;
 	        } else {
@@ -70,14 +70,15 @@
 		    },250);
 	    }
 
-        function heatThread(){
+	    function heatThread(){
+	            tempFinalStatic = parseInt($('#TempFinal').val());
                 var c = 4180; // J/kg°C
                 var density = 0.9999; //g*cm3
                 var mass = (tankVolume* 0.264) * density; //kg;
                 var heat = energyInWatts * timeElapsed; //mala esta onda;
             //double deltaTemp = heat / (mass * c);
 
-                if((document.getElementById("manual").isDisabled){
+                if((document.getElementById("manual").disabled)){
                     if (currentTemp >= tempFinalStatic) {
                         clearInterval(intervalControl);
                         intervalControl = setInterval(function () {
@@ -85,12 +86,14 @@
                         }, 250);
                     }
                 }
+                
                 var tempChange = Math.abs(tempFinalStatic - currentTemp) * (1/timeInSeconds);
                 currentTemp = currentTemp * 1 + tempChange;
                 timeInSecondsChange = timeInSecondsChange - 1;
                 setTime(timeInSecondsChange);
                 timeElapsed++;
                 updateProgressBar(tempFinalStatic, currentTemp);
+                $('.temp-change-text').text(currentTemp.toPrecision(4));
         }
 
         function setWater(){
@@ -124,6 +127,7 @@
         }
 
         function coldThread() {
+            initData();
             if (currentTemp <= tempFinalStatic || initTemp <= currentTemp) {
                 clearInterval(intervalControl);
                 intervalControl = setInterval(function () {
@@ -138,19 +142,21 @@
             var newMass = (amountWaterEntered) * 1;
             
             var oldMass = (tankVolume) * 1;
-            var numerator = (oldMass * currentTemp) + (newMass * 24);
-            var tempTemp = numerator / (currentTemp + 24);
+            var numerator = (oldMass * currentTemp) + (newMass * initTemp);
+            var tempTemp = numerator / (currentTemp + initTemp);
             currentTemp = tempTemp;
             updateProgressBar();
             tankVolume += amountWaterEntered;
 
         }
+
         function setTime(seconds) {
             var minutos = (seconds / 60);
             minutos = (Math.floor(minutos));
             $('#TextBox8').val(minutos + " Minutos");
             //TextBox8.Text = minutos + " Minutos";
         }
+
         function updateProgressBar() {
            
             var calc = currentTemp / tempFinalStatic;
@@ -174,6 +180,7 @@
             });
 
         }
+
         function initData() {
             tankCapacity = parseInt($('#TextBox1').val());
             currentTemp = parseInt($('#TextBox2').val());
@@ -249,7 +256,7 @@
     <hr />
     <table class="table">       
         <tr>
-            <th>Temperatura
+            <th>Temperatura <span class="temp-change-text"></span>
                 <div class="progress" runat="server">
                     <div class="progress-bar progress-bar-danger" role="progressbar" runat="server" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="progress">
                         &nbsp;
@@ -277,7 +284,7 @@
         </tr>
         <tr>
             <td>
-                <input id="abrirAguafria" type="button" value="Abrir Agua Fría" disabled="disabled" class="btn btn-primary btn-large" onmousedown="setWater()"/>
+                <input id="abrirAguaFria" type="button" value="Abrir Agua Fría" disabled="disabled" class="btn btn-primary btn-large" onmousedown="setWater()"/>
                 <input id="abrirSalidaAgua" type="button" value="Abrir salida de Agua" disabled="disabled" class="btn btn-primary btn-large" onmousedown="outWater()"/>(Mantener Presionado)</td>
         </tr>
     </table>
