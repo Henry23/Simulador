@@ -93,7 +93,7 @@
                 updateProgressBar(tempFinalStatic, currentTemp);
         }
 
-        function setWater(amountWaterEntered){
+        function setWater(){
 
             //if((tankVolume+((amountWaterEntered) * 1))<tankVolume){
                 var newMass = (amountWaterEntered) * 1;
