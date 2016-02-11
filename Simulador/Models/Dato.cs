@@ -24,23 +24,27 @@ namespace Simulador.Models
 
  
         [Display(Name = "Costo de kWh")]
-        [Required(ErrorMessage = "Temperatura inicial del tanque no puede ser vacia")]
-        [StringLength(10)]
+        [Required(ErrorMessage = "Costo de Kilowatts no puede ser vacío")]
+        [RegularExpression(@"^[+]?[0-9]*\.?[0-9]+$$", ErrorMessage = "Ingrese el número con presición decimal")]
+        
         public string material_tanque { get; set; }
 
 
         [Display(Name = "Potencia en watts")]
         [Required(ErrorMessage = "Resistencia en watts no puede ser vacia")]
+        [RegularExpression(@"^[+]?[0-9]*\.?[0-9]+$$", ErrorMessage = "Ingrese el número con presición decimal")]
         public int resistencia_watts { get; set; }
 
 
         [Display(Name = "Volumen en Litros/Segundos")]
         [Required(ErrorMessage = "Cantidad en ML/Segundos no puede ser vacia")]
+        [RegularExpression(@"^[+]?[0-9]*\.?[0-9]+$", ErrorMessage = "Ingrese el número con presición decimal")]
         [StringLength(10)]
         public string cant_ml_s { get; set; }
 
         [Display(Name = "Volumen en Litros inicial")]
         [Required(ErrorMessage = "Cantidad en ML inicial no puede ser vacia")]
+        [RegularExpression(@"^[+]?[0-9]*\.?[0-9]+$", ErrorMessage = "Ingrese el número con presición decimal")]
         [StringLength(10)]
         public string cant_ml_incial { get; set; }
 
