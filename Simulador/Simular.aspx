@@ -44,6 +44,7 @@
         var initTemp = 0.0;
         var amountWaterEntered = 0.0;
         var intervalControl;
+       
         
   
 
@@ -92,29 +93,33 @@
                 updateProgressBar(tempFinalStatic, currentTemp);
         }
 
-        function setWater(){
+        function setWater(amountWaterEntered){
 
-            var newMass = (amountWaterEntered) * 1;
-            
-            var oldMass = (tankVolume) * 1;
-            var numerator = (oldMass * currentTemp) + (newMass * 24);
-            var tempTemp = numerator / (currentTemp + 24);
-            currentTemp = tempTemp;
-            updateProgressBar();
-            tankVolume += amountWaterEntered;
-          
+            //if((tankVolume+((amountWaterEntered) * 1))<tankVolume){
+                var newMass = (amountWaterEntered) * 1;
+           
+                var oldMass = (tankVolume) * 1;
+                var numerator = (oldMass * currentTemp) + (newMass * 24);
+                var tempTemp = numerator / (currentTemp + 24);
+                currentTemp = tempTemp;
+                updateProgressBar();
+                tankVolume += amountWaterEntered;
+             //}
         
         }
   
         function outWater(){
         
-            var newMass = (amountWaterEntered) * 1;            
-            var oldMass = (tankVolume) * 1;
-            var numerator = (oldMass * currentTemp) - (newMass * 24);
-            var tempTemp = numerator / (currentTemp - 24);
-            currentTemp = tempTemp;
-            updateProgressBar();
-            tankVolume -= amountWaterEntered;
+
+           // if(tankVolume>=()){
+                var newMass = (amountWaterEntered) * 1;            
+                var oldMass = (tankVolume) * 1;
+                var numerator = (oldMass * currentTemp) - (newMass * 24);
+                var tempTemp = numerator / (currentTemp - 24);
+                currentTemp = tempTemp;
+                updateProgressBar();
+                tankVolume -= amountWaterEntered;
+            //}
          
         }
 
