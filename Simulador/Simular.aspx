@@ -277,8 +277,8 @@
         </tr>
         <tr>
             <td>
-                <input id="abrirAguafria" type="button" value="Abrir Agua Fría" disabled="disabled" onmousedown="setWater()"/>
-                <input id="abrirSalidaAgua" type="button" value="Abrir salida de Agua" disabled="disabled" onmousedown="outWater()"/>(Mantener Presionado)</td>
+                <input id="abrirAguafria" type="button" value="Abrir Agua Fría" disabled="disabled" class="btn btn-primary btn-large" onmousedown="setWater()"/>
+                <input id="abrirSalidaAgua" type="button" value="Abrir salida de Agua" disabled="disabled" class="btn btn-primary btn-large" onmousedown="outWater()"/>(Mantener Presionado)</td>
         </tr>
     </table>
 
