@@ -44,25 +44,25 @@
         var initTemp = 0.0;
         var amountWaterEntered = 0.0;
         var intervalControl;
+        var openWaterControl;
+        var closeWaterControl;
        
         
   
 
 
-	    function radiobuttons() {
-
-
-	    }
+	    
 
 	    function initInterval() {
 	        document.getElementById("manual").disabled = true;
 	        document.getElementById("automatico").disabled = true;
-	        if (document.getElementById("manual").disabled) {
-	            document.getElementById("abrirAguaFria").disabled = true;
-	            document.getElementById("abrirSalidaAgua").disabled = true;
-	        } else {
+
+	        if (document.getElementById("manual").checked) {
 	            document.getElementById("abrirAguaFria").disabled = false;
 	            document.getElementById("abrirSalidaAgua").disabled = false;
+	        } else {
+	            document.getElementById("abrirAguaFria").disabled = true;
+	            document.getElementById("abrirSalidaAgua").disabled = true;
 	        }	       
 	        initData();
 		    intervalControl = setInterval(function(){
@@ -78,17 +78,17 @@
                 var heat = energyInWatts * timeElapsed; //mala esta onda;
             //double deltaTemp = heat / (mass * c);
 
-                if((document.getElementById("manual").disabled)){
-                    if (currentTemp >= tempFinalStatic) {
+             
+                if (currentTemp >= tempFinalStatic) {
                         clearInterval(intervalControl);
                         intervalControl = setInterval(function () {
                             coldThread();
                         }, 250);
                     }
-                }
+                
                 
                 var tempChange = Math.abs(tempFinalStatic - currentTemp) * (1/timeInSeconds);
-                currentTemp = currentTemp * 1 + tempChange;
+                currentTemp = currentTemp * 1 + Math.abs(tempChange);
                 timeInSecondsChange = timeInSecondsChange - 1;
                 setTime(timeInSecondsChange);
                 timeElapsed++;
@@ -96,39 +96,62 @@
                 $('.temp-change-text').text(currentTemp.toPrecision(4));
         }
 
-        function setWater(){
-
-            //if((tankVolume+((amountWaterEntered) * 1))<tankVolume){
-                var newMass = (amountWaterEntered) * 1;
-           
-                var oldMass = (tankVolume) * 1;
-                var numerator = (oldMass * currentTemp) + (newMass * 24);
-                var tempTemp = numerator / (currentTemp + 24);
-                currentTemp = tempTemp;
-                updateProgressBar();
-                tankVolume += amountWaterEntered;
-             //} 
-        
-        }
   
-        function outWater(){
-        
+	    function openWater() {
+	        var aguaEntrando = document.getElementById("abrirAguaFria").value;
 
-           // if(tankVolume>=()){
-                var newMass = (amountWaterEntered) * 1;            
-                var oldMass = (tankVolume) * 1;
-                var numerator = (oldMass * currentTemp) - (newMass * 24);
-                var tempTemp = numerator / (currentTemp - 24);
-                currentTemp = tempTemp;
-                updateProgressBar();
-                tankVolume -= amountWaterEntered;
-            //}
-         
-        }
+	        if(aguaEntrando!=0){
+	        
+                if(openWaterControl){clearInterval(openWaterControl)}
+                openWaterControl = setInterval(function () {
+                    if (tankVolume >= tankCapacity) {
+                        return;
+                    }
+	                tankVolume+=aguaEntrando*1;
+	                timeInSeconds = Math.round(100 * (((tankVolume * 0.264) * 8.33 * 453.59237) * (tempFinalStatic - currentTemp) / (energyInWatts * 0.238845896628 * 95)));
+	                if (timeInSeconds > timeInSecondsChange) {
+	                    timeInSeconds -= timeInSecondsChange * 1;
+	                }
+	                //timeInSecondsChange = timeInSeconds;
+	            }, 250);
+
+	        }else{
+
+	            if (openWaterControl) { clearInterval(openWaterControl) }
+            }
+
+
+	    }
+      
+	    function dropWater() {
+
+	        var aguaSalida = document.getElementById("abrirSalidaAgua").value;
+
+	        if (aguaSalida != 0) {
+
+	            if (closeWaterControl) { clearInterval(closeWaterControl) }
+	            closeWaterControl = setInterval(function () {
+	                if (tankVolume <= tankCapacity*.10) {
+	                    return;
+	                }
+	                tankVolume -= aguaSalida*1;
+	                timeInSeconds = Math.round(100 * (((tankVolume * 0.264) * 8.33 * 453.59237) * (tempFinalStatic - currentTemp) / (energyInWatts * 0.238845896628 * 95)));
+	                if (timeInSeconds > timeInSecondsChange) {
+	                    timeInSeconds -= timeInSecondsChange * 1;
+	                }
+	                // timeInSecondsChange = timeInSeconds;
+	            }, 250);
+
+	        } else {
+
+	            if (closeWaterControl) { clearInterval(closeWaterControl) }
+	        }
+            
+	    }
 
         function coldThread() {
-            initData();
-            if (currentTemp <= tempFinalStatic || initTemp <= currentTemp) {
+            tempFinalStatic = parseInt($('#TempFinal').val());
+            if (currentTemp <= tempFinalStatic || 20 >= currentTemp) {
                 clearInterval(intervalControl);
                 intervalControl = setInterval(function () {
                     heatThread();
@@ -140,9 +163,11 @@
             */
             //grams
             var newMass = (amountWaterEntered) * 1;
-            
+            if (tankVolume <= tankCapacity * .10) {
+                newMass = 0;
+            }
             var oldMass = (tankVolume) * 1;
-            var numerator = (oldMass * initTemp) + (newMass * currentTemp);
+            var numerator = (oldMass * 20) + (newMass * currentTemp);
             var tempTemp = numerator / (oldMass + newMass);
             currentTemp = tempTemp;
             updateProgressBar();
@@ -284,8 +309,8 @@
         </tr>
         <tr>
             <td>
-                <input id="abrirAguaFria" type="button" value="Abrir Agua Fría" disabled="disabled" class="btn btn-primary btn-large" onmousedown="setWater()"/>
-                <input id="abrirSalidaAgua" type="button" value="Abrir salida de Agua" disabled="disabled" class="btn btn-primary btn-large" onmousedown="outWater()"/>(Mantener Presionado)</td>
+                Tasa de entrada: <input id="abrirAguaFria" type="number"  disabled="disabled" class="btn btn-primary btn-large" onchange="openWater()"/>
+                Tasa de Salida :<input id="abrirSalidaAgua" type="number" disabled="disabled" class="btn btn-primary btn-large" onchange="dropWater()"/></td>
         </tr>
     </table>
 
