@@ -105,6 +105,7 @@
                 if(openWaterControl){clearInterval(openWaterControl)}
                 openWaterControl = setInterval(function () {
                     if (tankVolume >= tankCapacity) {
+                        tankVolume = tankCapacity;
                         return;
                     }
 	                tankVolume+=aguaEntrando*1;
@@ -131,7 +132,8 @@
 
 	            if (closeWaterControl) { clearInterval(closeWaterControl) }
 	            closeWaterControl = setInterval(function () {
-	                if (tankVolume <= tankCapacity*.10) {
+	                if (tankVolume <= tankCapacity * .10) {
+	                    tankVolume = tankCapacity * .10;
 	                    return;
 	                }
 	                tankVolume -= aguaSalida*1;
@@ -178,6 +180,7 @@
         function setTime(seconds) {
             var minutos = (seconds / 60);
             minutos = (Math.floor(minutos));
+            minutos = (Math.abs(minutos));
             $('#TextBox8').val(minutos + " Minutos");
             //TextBox8.Text = minutos + " Minutos";
         }
@@ -190,6 +193,7 @@
             }
             var percentageWidth = calc * 100;
             var tankCurrentCap = tankVolume / tankCapacity;
+            $('.water-change-text').text(tankVolume.toPrecision(4));
             tankCurrentCap *= 100;
             if (percentageWidth > 100) {
                 percentageWidth = 100;
@@ -287,7 +291,7 @@
                         &nbsp;
                     </div>
                 </div>
-                Capacidad Tanque
+                Capacidad Tanque  <span class="water-change-text"></span>
                 <div class="progress" runat="server">
                     <div class="progress-bar progress-bar" role="progressbar" runat="server" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="tankProgress">
                         &nbsp;
